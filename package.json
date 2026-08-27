@@ -1,0 +1,23 @@
+{
+  "name": "open-debate-workbench",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "setup": "uv sync --directory apps/api --dev && npm --prefix apps/web ci && npm --prefix packages/contracts ci",
+    "dev": "python scripts/dev.py",
+    "dev:api": "uv run --directory apps/api uvicorn debate_api.main:app --app-dir src --reload --port 8000",
+    "dev:web": "npm --prefix apps/web run dev",
+    "lint:api": "uv run --directory apps/api ruff check . ../../scripts",
+    "lint:web": "npm --prefix apps/web run lint",
+    "lint": "npm run lint:api && npm run lint:web",
+    "type-check:api": "uv run --directory apps/api mypy src",
+    "type-check:web": "npm --prefix apps/web run typecheck",
+    "type-check": "npm run type-check:api && npm run type-check:web",
+    "test:api": "uv run --directory apps/api pytest tests",
+    "test:web": "npm --prefix apps/web run test",
+    "test": "npm run test:api && npm run test:web",
+    "contracts:generate": "uv run --directory apps/api python ../../scripts/export_openapi.py && npm --prefix packages/contracts run generate",
+    "contracts:check": "npm run contracts:generate && git diff --exit-code -- packages/contracts/openapi.json packages/contracts/generated/api.ts",
+    "check": "npm run lint && npm run type-check && npm run test && npm run contracts:check"
+  }
+}

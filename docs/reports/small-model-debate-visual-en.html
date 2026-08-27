@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A visual report on exploratory multi-agent debate experiments with Qwen2.5-1.5B: a dedicated checker can steer correction, but does not guarantee correctness.">
+  <title>Weak-model debate needs a stable verifier</title>
+  <link rel="stylesheet" href="assets/small-model-debate-report.css">
+</head>
+<body>
+  <div class="wrap topbar">
+    <div class="brand">Multi-agent debate · empirical note 01</div>
+    <a class="lang" href="small-model-debate-visual.html" lang="zh-CN">中文</a>
+  </div>
+
+  <main class="wrap">
+    <header>
+      <div class="status">Small-sample exploratory study</div>
+      <h1>Weak-model debate<br>needs a stable verifier.</h1>
+      <p class="lead">Giving one agent a dedicated checking role makes correction more directional. But <strong>having a checker does not make the answer reliable</strong>: the checker can still be swayed by its peers.</p>
+      <div class="meta">
+        <span class="pill">Model: Qwen2.5-1.5B</span>
+        <span class="pill">GSM8K: 40 questions / condition</span>
+        <span class="pill">SVAMP: 20 questions / condition</span>
+        <span class="pill">Plain-text reasoning · no tools</span>
+      </div>
+    </header>
+
+    <div class="scope"><strong>How to read this:</strong> this is a mechanism probe, not a product-performance claim. Percentage points (pp) report within-run accuracy change from the first to the final turn. Samples are small, and we make no statistical-significance claim.</div>
+
+    <section class="grid primer" aria-labelledby="primer-title">
+      <article class="panel">
+        <div class="panel-label">The experiment in 30 seconds</div>
+        <h2 id="primer-title">Only the third agent's job changes</h2>
+        <p>Three agents discuss the same math word problem for four turns. The group's most frequent final answer is scored.</p>
+        <div class="protocol" aria-label="Comparison of experimental conditions">
+          <div class="condition">
+            <b>Homogeneous group</b><span>All 3 agents solve the problem</span>
+            <div class="agents" aria-hidden="true"><i class="agent">S</i><i class="agent">S</i><i class="agent">S</i></div>
+          </div>
+          <div class="versus">VS</div>
+          <div class="condition">
+            <b>Checker group</b><span>2 solvers + 1 dedicated checker</span>
+            <div class="agents" aria-hidden="true"><i class="agent">S</i><i class="agent">S</i><i class="agent checker">C</i></div>
+          </div>
+        </div>
+      </article>
+      <aside class="panel">
+        <div class="panel-label">Terms used below</div>
+        <dl class="definitions">
+          <div class="definition"><dt>T1 → T4</dt><dd>First independent answer → end of the fourth turn.</dd></div>
+          <div class="definition"><dt>Plurality</dt><dd>The group's most frequent answer for each question.</dd></div>
+          <div class="definition"><dt>Rescue</dt><dd>Wrong at T1, corrected by T4.</dd></div>
+          <div class="definition"><dt>Loss</dt><dd>Correct at T1, changed to wrong by T4.</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <div class="grid stats" aria-label="Headline results">
+      <article class="card"><div class="label">GSM8K · 3 homogeneous agents</div><div class="value red">−2.5 pp</div><p>60% → 57.5% · slightly worse after debate</p></article>
+      <article class="card"><div class="label">GSM8K · 2 solvers + 1 checker</div><div class="value green">+7.5 pp</div><p>60% → 67.5% · better after debate</p></article>
+      <article class="card"><div class="label">SVAMP · 2 solvers + 1 checker</div><div class="value blue">+10 pp</div><p>60% → 70% · same direction on a second dataset</p></article>
+      <article class="card"><div class="label">Add a fourth checker</div><div class="value amber">0 pp</div><p>70% → 70% · no net gain</p></article>
+    </div>
+
+    <section aria-labelledby="finding-1">
+      <div class="section-head">
+        <div><span class="step">Finding 01</span><h2 id="finding-1">Roles can change correction direction</h2></div>
+        <p>The checker condition rises from first to final turn on both GSM8K and SVAMP. The homogeneous condition does not rise consistently.</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/small-model-accuracy-curves.svg" alt="Plurality accuracy from T1 to T4 for homogeneous and checker groups on GSM8K and SVAMP">
+        <figcaption class="caption"><strong>Green: dedicated checker. Red: all agents solve.</strong><span>Curves describe direction within each run; they do not establish a causal cross-run advantage.</span></figcaption>
+      </figure>
+      <div class="grid insight">
+        <article class="panel takeaway">
+          <strong>A verification role<br>is not verification ability.</strong>
+          <p>The checker appears to change what the group attends to and preserves, rather than becoming an automatic judge of truth.</p>
+        </article>
+        <article class="panel signal" aria-label="GSM8K correction details">
+          <div class="signal-row"><span>Initial errors rescued</span><div class="track"><div class="fill" style="width:63%;background:var(--green)"></div></div><b>5 / 16</b></div>
+          <div class="signal-row"><span>Initial correct lost</span><div class="track"><div class="fill" style="width:33%;background:var(--red)"></div></div><b>2 / 24</b></div>
+          <div class="signal-row"><span>Paired final wins</span><div class="track"><div class="fill" style="width:83%;background:var(--blue)"></div></div><b>5 : 1</b></div>
+          <div class="signal-note">The 5:1 split contains only six discordant pairs: worth replicating, but still weak evidence.</div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="finding-2">
+      <div class="section-head">
+        <div><span class="step">Finding 02</span><h2 id="finding-2">More agents do not yield monotonic gains</h2></div>
+        <p>After two turns, 3 agents peak at 75%. Five to seven agents plateau at 70%, while mean latency grows from 4.0 to 45.3 seconds.</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/small-model-agent-scaling.svg" alt="Plurality, strict-majority and per-agent accuracy plus latency from one to seven agents">
+        <figcaption class="caption"><strong>Accuracy zigzags; cost keeps rising.</strong><span>Each agent count independently samples 20 questions, so this does not identify an optimal count.</span></figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="finding-3">
+      <div class="section-head">
+        <div><span class="step">Finding 03</span><h2 id="finding-3">Direction is not a guarantee</h2></div>
+        <p>Replacing one solver with a checker gives a suggestive signal. Simply adding a fourth checker does not improve final accuracy.</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/small-model-debate-dynamics.svg" alt="Net correction direction by role condition and ablation results from adding a fourth checker">
+        <figcaption class="caption"><strong>Specialization creates movement—and can create false consensus.</strong><span>The SVAMP checker condition ends with 20% false consensus.</span></figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="failure-cases">
+      <div class="section-head">
+        <div><span class="step">Failure cases</span><h2 id="failure-cases">How wrong answers become persuasive</h2></div>
+        <p>A correct candidate existed in the first turn. The failure was deciding which explanation to trust, not the absence of a correct solution.</p>
+      </div>
+      <div class="grid cases">
+        <article class="case">
+          <div class="id">test-888 · cookies</div><h3>A typo becomes the majority's fact</h3>
+          <p class="case-lead">Two initially correct agents copy a more elaborate but wrong explanation.</p>
+          <div class="trajectory" aria-label="Plurality answer trajectory: 10, 6, 6, 6"><span class="node green">10</span><span class="arrow">→</span><span class="node red">6</span><span class="arrow">→</span><span class="node red">6</span><span class="arrow">→</span><span class="node red">6</span></div>
+          <p>The model reads “5 five cookies” as 5×5. The explanation becomes longer and more reasoning-like, but not more correct.</p>
+        </article>
+        <article class="case">
+          <div class="id">test-192 · trees</div><h3>A correct step, then a flipped conclusion</h3>
+          <p class="case-lead">The last turn correctly calculates 39 dead trees, then reports 39 as the number remaining.</p>
+          <div class="trajectory" aria-label="Plurality answer trajectory: 91, 515, 91, 39"><span class="node green">91</span><span class="arrow">→</span><span class="node red">515</span><span class="arrow">→</span><span class="node green">91</span><span class="arrow">→</span><span class="node red">39</span></div>
+          <p>Debate adds steps, but does not reliably verify what quantity the final number actually answers.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="boundary" aria-labelledby="boundary-title">
+      <span class="step">Claim boundary</span><h2 id="boundary-title">What does this study show?</h2>
+      <div class="grid boundary-grid">
+        <div class="boundary-box good">
+          <h3>Supported by these results</h3>
+          <ul><li>A dedicated checking role can steer correction in weak-model debate.</li><li>More turns, longer explanations, or more agents are not reliable verification mechanisms by themselves.</li><li>The checker should be isolated from circular peer influence.</li></ul>
+        </div>
+        <div class="boundary-box caution">
+          <h3>Not supported by these results</h3>
+          <ul><li>“A checker always improves final accuracy.”</li><li>“More agents produce better answers.”</li><li>A universal effect size or optimal agent count from independent runs with n=20–40.</li></ul>
+        </div>
+      </div>
+      <div class="next"><b>Next test</b><p>Freeze the same solver outputs, then ask an independent adjudicator to make one final decision. This separates verification ability from contamination by repeated peer feedback.</p></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <nav><a href="small-model-debate-failure-analysis.md">Full methods and data tables</a><a href="https://openreview.net/pdf?id=zj7YuTE4t8">Reference paper: Du et al.</a><a href="small-model-debate-visual.html" lang="zh-CN">中文版</a></nav>
+      <div>Descriptive study · GSM8K n=40/condition · SVAMP n=20/condition · agent sweep n=20/cell · 2026-08-27</div>
+    </div>
+  </footer>
+</body>
+</html>

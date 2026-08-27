@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Qwen2.5-1.5B 多智能体辩论探索性实验的可视化报告：专职 checker 能改变纠错方向，但并不保证最终正确率。">
+  <title>弱模型辩论，需要稳定的验证者</title>
+  <link rel="stylesheet" href="assets/small-model-debate-report.css">
+</head>
+<body>
+  <div class="wrap topbar">
+    <div class="brand">Multi-agent debate · empirical note 01</div>
+    <a class="lang" href="small-model-debate-visual-en.html" lang="en">English</a>
+  </div>
+
+  <main class="wrap">
+    <header>
+      <div class="status">小样本探索性实验</div>
+      <h1>弱模型辩论，<br>需要稳定的验证者。</h1>
+      <p class="lead">让一个 agent 专门检查答案，能让纠错更有方向；但<strong>“有 checker”不等于“答案更可靠”</strong>，它也会被其他 agent 带偏。</p>
+      <div class="meta">
+        <span class="pill">模型：Qwen2.5-1.5B</span>
+        <span class="pill">GSM8K：每条件 40 题</span>
+        <span class="pill">SVAMP：每条件 20 题</span>
+        <span class="pill">纯文本推理 · 不使用工具</span>
+      </div>
+    </header>
+
+    <div class="scope"><strong>读法：</strong>这是一组机制探索，不是产品效果承诺。页面中的百分比点（pp）表示同一次辩论从首轮到末轮的准确率变化；样本量较小，不作统计显著性声明。</div>
+
+    <section class="grid primer" aria-labelledby="primer-title">
+      <article class="panel">
+        <div class="panel-label">30 秒看懂实验</div>
+        <h2 id="primer-title">我们只改变第三个 agent 的职责</h2>
+        <p>同一道数学文字题由 3 个 agent 连续讨论 4 轮，最后按出现最多的答案计分。</p>
+        <div class="protocol" aria-label="实验条件对比">
+          <div class="condition">
+            <b>同质组</b><span>3 个 agent 都负责解题</span>
+            <div class="agents" aria-hidden="true"><i class="agent">解</i><i class="agent">解</i><i class="agent">解</i></div>
+          </div>
+          <div class="versus">VS</div>
+          <div class="condition">
+            <b>Checker 组</b><span>2 个解题 + 1 个专职检查</span>
+            <div class="agents" aria-hidden="true"><i class="agent">解</i><i class="agent">解</i><i class="agent checker">验</i></div>
+          </div>
+        </div>
+      </article>
+      <aside class="panel">
+        <div class="panel-label">页面术语</div>
+        <dl class="definitions">
+          <div class="definition"><dt>T1 → T4</dt><dd>第一次独立作答 → 第四轮讨论结束。</dd></div>
+          <div class="definition"><dt>多数答案</dt><dd>每题由出现次数最多的答案代表整组。</dd></div>
+          <div class="definition"><dt>救回</dt><dd>T1 答错、T4 改对。</dd></div>
+          <div class="definition"><dt>丢失</dt><dd>T1 答对、T4 改错。</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <div class="grid stats" aria-label="核心结果">
+      <article class="card"><div class="label">GSM8K · 3 个同质 agent</div><div class="value red">−2.5 pp</div><p>60% → 57.5% · 讨论后略降</p></article>
+      <article class="card"><div class="label">GSM8K · 2 解题 + 1 checker</div><div class="value green">+7.5 pp</div><p>60% → 67.5% · 讨论后上升</p></article>
+      <article class="card"><div class="label">SVAMP · 2 解题 + 1 checker</div><div class="value blue">+10 pp</div><p>60% → 70% · 跨数据集同方向</p></article>
+      <article class="card"><div class="label">再增加第 4 个 checker</div><div class="value amber">0 pp</div><p>70% → 70% · 没有净收益</p></article>
+    </div>
+
+    <section aria-labelledby="finding-1">
+      <div class="section-head">
+        <div><span class="step">发现 01</span><h2 id="finding-1">角色能改变纠错方向</h2></div>
+        <p>在 GSM8K 与 SVAMP 中，checker 组都从首轮到末轮上升；同质组没有稳定上升。</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/small-model-accuracy-curves.svg" alt="GSM8K 与 SVAMP 中，同质组和 checker 组从 T1 到 T4 的多数答案准确率曲线">
+        <figcaption class="caption"><strong>绿线：有专职 checker；红线：全部负责解题。</strong><span>曲线描述同一次运行内的方向，不用于宣称跨运行因果优势。</span></figcaption>
+      </figure>
+      <div class="grid insight">
+        <article class="panel takeaway">
+          <strong>验证职责<br>不等于验证能力。</strong>
+          <p>checker 更像是在改变全组“注意什么、保留什么”，而不是自动成为正确答案的裁判。</p>
+        </article>
+        <article class="panel signal" aria-label="GSM8K 纠错明细">
+          <div class="signal-row"><span>初始错题救回</span><div class="track"><div class="fill" style="width:63%;background:var(--green)"></div></div><b>5 / 16</b></div>
+          <div class="signal-row"><span>初始对题丢失</span><div class="track"><div class="fill" style="width:33%;background:var(--red)"></div></div><b>2 / 24</b></div>
+          <div class="signal-row"><span>最终配对独赢</span><div class="track"><div class="fill" style="width:83%;background:var(--blue)"></div></div><b>5 : 1</b></div>
+          <div class="signal-note">5:1 只有 6 个不一致样本，方向值得复验，但证据仍弱。</div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="finding-2">
+      <div class="section-head">
+        <div><span class="step">发现 02</span><h2 id="finding-2">更多 agent 没有单调增益</h2></div>
+        <p>固定两轮后，3-agent 达到 75%；5–7 agents 停在 70%，平均延迟从 4.0 秒增至 45.3 秒。</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/small-model-agent-scaling.svg" alt="1 到 7 个 agent 的多数答案准确率、严格多数准确率、单 agent 准确率和延迟">
+        <figcaption class="caption"><strong>准确率呈锯齿形，成本持续上升。</strong><span>每个 agent 数量独立采样 20 题；不能据此确定最佳数量。</span></figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="finding-3">
+      <div class="section-head">
+        <div><span class="step">发现 03</span><h2 id="finding-3">有方向，不等于有保证</h2></div>
+        <p>把一个 solver 换成 checker 有提示性收益；直接追加第四个 checker，却没有提高最终准确率。</p>
+      </div>
+      <figure class="figure">
+        <img src="assets/small-model-debate-dynamics.svg" alt="各角色条件的净纠错方向，以及追加第四个 checker 的消融结果">
+        <figcaption class="caption"><strong>专职角色制造了变化，也可能制造错误共识。</strong><span>SVAMP checker 组最终错误共识率为 20%。</span></figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="failure-cases">
+      <div class="section-head">
+        <div><span class="step">失败样本</span><h2 id="failure-cases">错误如何获得说服力</h2></div>
+        <p>正确候选从第一轮就存在；失败发生在判断哪个解释可信，而不是没有看到正确解法。</p>
+      </div>
+      <div class="grid cases">
+        <article class="case">
+          <div class="id">test-888 · cookies</div><h3>笔误变成多数事实</h3>
+          <p class="case-lead">一个复杂但错误的解释，被两个原本答对的 agent 复制。</p>
+          <div class="trajectory" aria-label="多数答案轨迹：10，6，6，6"><span class="node green">10</span><span class="arrow">→</span><span class="node red">6</span><span class="arrow">→</span><span class="node red">6</span><span class="arrow">→</span><span class="node red">6</span></div>
+          <p>模型把题目中的 “5 five cookies” 解释为 5×5。解释更长、更像推理，却没有更正确。</p>
+        </article>
+        <article class="case">
+          <div class="id">test-192 · trees</div><h3>局部算对，结论翻转</h3>
+          <p class="case-lead">最后一轮算对“死亡 39 棵”，却把 39 写成剩余数量。</p>
+          <div class="trajectory" aria-label="多数答案轨迹：91，515，91，39"><span class="node green">91</span><span class="arrow">→</span><span class="node red">515</span><span class="arrow">→</span><span class="node green">91</span><span class="arrow">→</span><span class="node red">39</span></div>
+          <p>辩论补充了步骤，但没有稳定验证“这个数字回答的究竟是什么”。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="boundary" aria-labelledby="boundary-title">
+      <span class="step">结论边界</span><h2 id="boundary-title">这组实验能说明什么？</h2>
+      <div class="grid boundary-grid">
+        <div class="boundary-box good">
+          <h3>当前结果支持</h3>
+          <ul><li>专职验证角色能改变弱模型辩论的纠错方向。</li><li>增加轮次、解释长度或 agent 数量，本身都不是可靠验证机制。</li><li>checker 需要与循环式意见传播隔离。</li></ul>
+        </div>
+        <div class="boundary-box caution">
+          <h3>当前结果不支持</h3>
+          <ul><li>“checker 必然提高最终准确率”。</li><li>“agent 越多，结果越好”。</li><li>由 n=20–40 的独立运行确定普适效果大小或最佳 agent 数。</li></ul>
+        </div>
+      </div>
+      <div class="next"><b>下一步</b><p>冻结同一批 solver 输出，再让独立 adjudicator 只做一次最终裁决。这样可以把“验证能力”与“被 peers 反向影响”分开测试。</p></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <nav><a href="small-model-debate-failure-analysis.md">完整方法与数据表（英文）</a><a href="https://openreview.net/pdf?id=zj7YuTE4t8">对照论文：Du et al.</a><a href="small-model-debate-visual-en.html" lang="en">English version</a></nav>
+      <div>Descriptive study · GSM8K n=40/condition · SVAMP n=20/condition · agent sweep n=20/cell · 2026-08-27</div>
+    </div>
+  </footer>
+</body>
+</html>

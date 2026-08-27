@@ -1,0 +1,90 @@
+name: Web CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    # `opened` covers a newly created ready PR; `synchronize` covers pushes to a
+    # ready PR; `ready_for_review` covers draft -> ready; `closed` cancels any
+    # in-progress PR run after merge or close. Jobs are skipped while draft or
+    # closed.
+    types: [opened, synchronize, ready_for_review, closed]
+    paths:
+      - "apps/web/**"
+      - "packages/contracts/**"
+      - "scripts/export_openapi.py"
+      - "package.json"
+      - ".github/workflows/web-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    # Draft and closed PR events may create a workflow run to cancel older work,
+    # but must not consume a runner. Merges to main run the checks on main.
+    name: Web checks
+    if: ${{ github.event_name == 'push' || (github.event.action != 'closed' && !github.event.pull_request.draft) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+
+      - name: Lint web
+        run: npm run lint --prefix apps/web
+
+      - name: Type-check web
+        run: npm run typecheck --prefix apps/web
+
+      - name: Test web
+        run: npm run test --prefix apps/web
+
+      - name: Build web
+        run: npm run build --prefix apps/web
+
+  contracts:
+    name: Contract drift check
+    if: ${{ github.event_name == 'push' || (github.event.action != 'closed' && !github.event.pull_request.draft) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: "0.12.5"
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: packages/contracts/package-lock.json
+
+      - name: Install contract generation dependencies
+        run: |
+          uv sync --directory apps/api --locked --no-dev
+          npm ci --prefix packages/contracts
+
+      - name: Regenerate and compare contracts
+        run: |
+          uv run --directory apps/api python ../../scripts/export_openapi.py
+          npm run generate --prefix packages/contracts
+          git diff --exit-code -- packages/contracts/openapi.json packages/contracts/generated/api.ts

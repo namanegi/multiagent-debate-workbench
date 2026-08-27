@@ -1,0 +1,31 @@
+{
+  "results": [
+    {
+      "title": "Synthetic primary result",
+      "url": "https://example.org/primary",
+      "content": "Redacted fixture snippet about the requested topic.",
+      "score": 0.91,
+      "raw_content": null,
+      "images": []
+    },
+    {
+      "title": "Synthetic secondary result",
+      "url": "https://docs.example.org/secondary#ignored",
+      "content": "Another short, redistributable fixture snippet.",
+      "score": 0.72,
+      "raw_content": null,
+      "images": []
+    },
+    {
+      "title": "Synthetic duplicate-domain result",
+      "url": "https://example.org/related",
+      "content": "A bounded synthetic result for duplicate-domain statistics.",
+      "score": 0.61,
+      "raw_content": null,
+      "images": []
+    }
+  ],
+  "response_time": 0.12,
+  "usage": {"credits": 1},
+  "request_id": "fixture-request-id"
+}

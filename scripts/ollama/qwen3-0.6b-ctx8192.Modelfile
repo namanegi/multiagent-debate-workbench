@@ -1,0 +1,5 @@
+FROM hf.co/ggml-org/Qwen3-0.6B-GGUF:Q4_0
+
+# Enough room for four short no-think debate turns while retaining full GPU
+# offload on the local benchmark host.
+PARAMETER num_ctx 8192

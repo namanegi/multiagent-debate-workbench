@@ -1,0 +1,6 @@
+FROM hf.co/ggml-org/Qwen3-0.6B-GGUF:Q4_0
+
+# Ollama otherwise allocates a 4K runtime context for this model even though
+# the Qwen3 GGUF advertises a 40,960-token context. This local alias keeps the
+# same weights and template while exposing the native context for benchmarks.
+PARAMETER num_ctx 40960

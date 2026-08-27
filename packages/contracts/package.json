@@ -1,0 +1,15 @@
+{
+  "name": "@open-debate/contracts",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    "./generated/api": "./generated/api.ts"
+  },
+  "scripts": {
+    "generate": "openapi-typescript openapi.json -o generated/api.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.6.1"
+  }
+}

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Qwen2.5-1.5B accuracy and cost across one to seven agents</title>
+  <desc id="desc">Two panels show non-monotonic two-turn correctness and increasing latency on twenty GSM8K questions per agent count.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08111f"/><stop offset="1" stop-color="#111a2e"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="720" rx="28" fill="url(#bg)"/>
+  <g font-family="Inter,Segoe UI,sans-serif">
+    <text x="62" y="62" fill="#f8fafc" font-size="28" font-weight="700">More agents do not reproduce monotonic scaling</text>
+    <text x="62" y="91" fill="#8fa2bd" font-size="15">GSM8K · n=20 per count · 2 turns · homogeneous roles · provider-default temperature</text>
+
+    <rect x="52" y="116" width="526" height="448" rx="20" fill="#0d1829" stroke="#21314b"/>
+    <text x="78" y="154" fill="#dce7f7" font-size="18" font-weight="650">A · T2 correctness by agent count</text>
+    <text x="78" y="178" fill="#7186a3" font-size="13">Paper plurality peaks at 3 agents; individual accuracy does not scale</text>
+    <g stroke="#263750" stroke-dasharray="3 7"><line x1="112" y1="210" x2="550" y2="210"/><line x1="112" y1="265" x2="550" y2="265"/><line x1="112" y1="320" x2="550" y2="320"/><line x1="112" y1="375" x2="550" y2="375"/><line x1="112" y1="430" x2="550" y2="430"/></g>
+    <g fill="#7186a3" font-size="12" text-anchor="end"><text x="101" y="214">100</text><text x="101" y="269">75</text><text x="101" y="324">50</text><text x="101" y="379">25</text><text x="101" y="434">0</text></g>
+    <g fill="#8fa2bd" font-size="13" text-anchor="middle"><text x="140" y="462">1</text><text x="205" y="462">2</text><text x="270" y="462">3</text><text x="335" y="462">4</text><text x="400" y="462">5</text><text x="465" y="462">6</text><text x="530" y="462">7</text><text x="335" y="492" fill="#7186a3">agents</text></g>
+    <polyline points="140,287 205,309 270,265 335,287 400,276 465,276 530,276" fill="none" stroke="#67e8b3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <polyline points="140,287 205,320 270,265 335,298 400,276 465,309 530,309" fill="none" stroke="#70a5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="140,287 205,304 270,280 335,298 400,280 465,302 530,304" fill="none" stroke="#ff6b7a" stroke-width="3" stroke-dasharray="7 6" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#08111f" stroke-width="3"><g stroke="#67e8b3"><circle cx="140" cy="287" r="6"/><circle cx="205" cy="309" r="6"/><circle cx="270" cy="265" r="6"/><circle cx="335" cy="287" r="6"/><circle cx="400" cy="276" r="6"/><circle cx="465" cy="276" r="6"/><circle cx="530" cy="276" r="6"/></g><g stroke="#70a5ff"><circle cx="140" cy="287" r="5"/><circle cx="205" cy="320" r="5"/><circle cx="270" cy="265" r="5"/><circle cx="335" cy="298" r="5"/><circle cx="400" cy="276" r="5"/><circle cx="465" cy="309" r="5"/><circle cx="530" cy="309" r="5"/></g></g>
+    <text x="280" y="250" fill="#8ff2c7" font-size="13" font-weight="650">peak 75%</text>
+
+    <rect x="622" y="116" width="526" height="448" rx="20" fill="#0d1829" stroke="#21314b"/>
+    <text x="648" y="154" fill="#dce7f7" font-size="18" font-weight="650">B · Debate direction and cost</text>
+    <text x="648" y="178" fill="#7186a3" font-size="13">Bars: T1→T2 plurality change · line: mean latency per question</text>
+    <line x1="682" y1="295" x2="1128" y2="295" stroke="#51647f" stroke-width="2"/>
+    <g stroke="#263750" stroke-dasharray="3 7"><line x1="682" y1="215" x2="1128" y2="215"/><line x1="682" y1="375" x2="1128" y2="375"/><line x1="682" y1="430" x2="1128" y2="430"/></g>
+    <g fill="#7186a3" font-size="12" text-anchor="end"><text x="671" y="219">+20pp</text><text x="671" y="299">0</text><text x="671" y="379">−20pp</text></g>
+    <g opacity=".92"><rect x="692" y="275" width="36" height="20" rx="5" fill="#67e8b3"/><rect x="757" y="295" width="36" height="100" rx="5" fill="#ff6b7a"/><rect x="822" y="275" width="36" height="20" rx="5" fill="#67e8b3"/><rect x="887" y="295" width="36" height="40" rx="5" fill="#ff6b7a"/><rect x="952" y="295" width="36" height="20" rx="5" fill="#ff6b7a"/><rect x="1017" y="275" width="36" height="20" rx="5" fill="#67e8b3"/><rect x="1082" y="291" width="36" height="8" rx="4" fill="#7186a3"/></g>
+    <polyline points="710,412 775,390 840,371 905,335 970,309 1035,268 1100,230" fill="none" stroke="#ffc46b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <g fill="#08111f" stroke="#ffc46b" stroke-width="3"><circle cx="710" cy="412" r="6"/><circle cx="775" cy="390" r="6"/><circle cx="840" cy="371" r="6"/><circle cx="905" cy="335" r="6"/><circle cx="970" cy="309" r="6"/><circle cx="1035" cy="268" r="6"/><circle cx="1100" cy="230" r="6"/></g>
+    <g fill="#8fa2bd" font-size="13" text-anchor="middle"><text x="710" y="462">1</text><text x="775" y="462">2</text><text x="840" y="462">3</text><text x="905" y="462">4</text><text x="970" y="462">5</text><text x="1035" y="462">6</text><text x="1100" y="462">7</text><text x="905" y="492" fill="#7186a3">agents</text></g>
+    <text x="1100" y="216" text-anchor="end" fill="#ffd590" font-size="13" font-weight="650">45.3 s</text>
+
+    <circle cx="110" cy="620" r="6" fill="#67e8b3"/><text x="126" y="625" fill="#cbd7e8" font-size="14">paper plurality</text>
+    <circle cx="300" cy="620" r="6" fill="#70a5ff"/><text x="316" y="625" fill="#cbd7e8" font-size="14">strict-majority accuracy</text>
+    <line x1="548" y1="620" x2="576" y2="620" stroke="#ff6b7a" stroke-width="3" stroke-dasharray="7 6"/><text x="590" y="625" fill="#cbd7e8" font-size="14">per-agent accuracy</text>
+    <line x1="812" y1="620" x2="840" y2="620" stroke="#ffc46b" stroke-width="4"/><text x="854" y="625" fill="#cbd7e8" font-size="14">latency</text>
+    <text x="62" y="679" fill="#657894" font-size="12">Independent cells; plurality uses first-agent tie breaking. Descriptive n=20 curves do not identify an optimal agent count.</text>
+  </g>
+</svg>

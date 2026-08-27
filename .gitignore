@@ -1,0 +1,47 @@
+# Python
+**/.venv/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node and frontend output
+node_modules/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.vite/
+apps/web/.vite/
+
+# Local configuration and runtime data
+.env
+.env.*
+!.env.example
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Generated local artifacts; the OpenAPI contract itself is intentionally tracked.
+artifacts/
+evals/artifacts/
+docs/reports/data/
+*.gguf
+**/.cache/huggingface/
+**/.hf_cache/
+**/.uv-cache-*/
+**/.pytest-*/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary work
+tmp/

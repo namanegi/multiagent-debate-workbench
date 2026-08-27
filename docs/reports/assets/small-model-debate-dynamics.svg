@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Correction direction and checker addition ablation</title>
+  <desc id="desc">The first panel shows net correct plurality votes relative to turn one on GSM8K and SVAMP. The second compares four homogeneous solvers with three solvers plus an additional checker at temperature zero.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08111f"/><stop offset="1" stop-color="#111a2e"/></linearGradient></defs>
+  <rect width="1200" height="720" rx="28" fill="url(#bg)"/>
+  <text x="62" y="62" fill="#f8fafc" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="700">A checker can steer debate — and still drift</text>
+  <text x="62" y="91" fill="#8fa2bd" font-family="Inter,Segoe UI,sans-serif" font-size="15">Within-run correction signal versus the direct “add one checker” ablation</text>
+
+  <g font-family="Inter,Segoe UI,sans-serif">
+    <rect x="52" y="116" width="526" height="416" rx="20" fill="#0d1829" stroke="#21314b"/>
+    <text x="78" y="154" fill="#dce7f7" font-size="18" font-weight="650">A · net correct plurality votes</text>
+    <text x="78" y="178" fill="#7186a3" font-size="13">Change from T1 · positive means net rescue</text>
+    <g stroke="#263750" stroke-dasharray="3 7"><line x1="112" y1="210" x2="550" y2="210"/><line x1="112" y1="270" x2="550" y2="270"/><line x1="112" y1="330" x2="550" y2="330"/><line x1="112" y1="390" x2="550" y2="390"/><line x1="112" y1="450" x2="550" y2="450"/></g>
+    <line x1="112" y1="330" x2="550" y2="330" stroke="#61738d" stroke-width="1.5"/>
+    <g fill="#7186a3" font-size="12" text-anchor="end"><text x="101" y="214">+4</text><text x="101" y="274">+2</text><text x="101" y="334">0</text><text x="101" y="394">−2</text><text x="101" y="454">−4</text></g>
+    <g fill="#8fa2bd" font-size="13" text-anchor="middle"><text x="150" y="486">T1</text><text x="280" y="486">T2</text><text x="410" y="486">T3</text><text x="540" y="486">T4</text></g>
+    <polyline points="150,330 280,360 410,390 540,360" fill="none" stroke="#ff6b7a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="150,330 280,270 410,240 540,240" fill="none" stroke="#67e8b3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="150,330 280,450 410,390 540,390" fill="none" stroke="#ffc46b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="150,330 280,300 410,300 540,270" fill="none" stroke="#70a5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#08111f" stroke-width="3"><g stroke="#ff6b7a"><circle cx="150" cy="330" r="5"/><circle cx="280" cy="360" r="5"/><circle cx="410" cy="390" r="5"/><circle cx="540" cy="360" r="5"/></g><g stroke="#67e8b3"><circle cx="150" cy="330" r="5"/><circle cx="280" cy="270" r="5"/><circle cx="410" cy="240" r="5"/><circle cx="540" cy="240" r="5"/></g><g stroke="#ffc46b"><circle cx="150" cy="330" r="5"/><circle cx="280" cy="450" r="5"/><circle cx="410" cy="390" r="5"/><circle cx="540" cy="390" r="5"/></g><g stroke="#70a5ff"><circle cx="150" cy="330" r="5"/><circle cx="280" cy="300" r="5"/><circle cx="410" cy="300" r="5"/><circle cx="540" cy="270" r="5"/></g></g>
+
+    <rect x="622" y="116" width="526" height="416" rx="20" fill="#0d1829" stroke="#21314b"/>
+    <text x="648" y="154" fill="#dce7f7" font-size="18" font-weight="650">B · adding a fourth checker</text>
+    <text x="648" y="178" fill="#7186a3" font-size="13">GSM8K · same 10 questions · temperature=0</text>
+    <g stroke="#263750" stroke-dasharray="3 7"><line x1="682" y1="210" x2="1120" y2="210"/><line x1="682" y1="265" x2="1120" y2="265"/><line x1="682" y1="320" x2="1120" y2="320"/><line x1="682" y1="375" x2="1120" y2="375"/><line x1="682" y1="430" x2="1120" y2="430"/></g>
+    <g fill="#7186a3" font-size="12" text-anchor="end"><text x="671" y="214">100</text><text x="671" y="269">75</text><text x="671" y="324">50</text><text x="671" y="379">25</text><text x="671" y="434">0</text></g>
+    <g fill="#8fa2bd" font-size="13" text-anchor="middle"><text x="740" y="486">T1</text><text x="870" y="486">T2</text><text x="1000" y="486">T3</text><text x="1130" y="486">T4</text></g>
+    <polyline points="740,254 870,254 1000,254 1130,254" fill="none" stroke="#c6d2e3" stroke-width="4" stroke-linecap="round"/>
+    <polyline points="740,276 870,254 1000,276 1130,276" fill="none" stroke="#67e8b3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#08111f" stroke-width="3"><g stroke="#c6d2e3"><circle cx="740" cy="254" r="6"/><circle cx="870" cy="254" r="6"/><circle cx="1000" cy="254" r="6"/><circle cx="1130" cy="254" r="6"/></g><g stroke="#67e8b3"><circle cx="740" cy="276" r="6"/><circle cx="870" cy="254" r="6"/><circle cx="1000" cy="276" r="6"/><circle cx="1130" cy="276" r="6"/></g></g>
+    <text x="1118" y="242" text-anchor="end" fill="#dbe5f2" font-size="13" font-weight="650">4 solvers · 0 changes</text>
+    <text x="1118" y="300" text-anchor="end" fill="#8ff2c7" font-size="13" font-weight="650">3 + checker · 15 changes, net 0</text>
+  </g>
+
+  <g font-family="Inter,Segoe UI,sans-serif">
+    <rect x="52" y="562" width="1096" height="104" rx="18" fill="#0d1829" stroke="#21314b"/>
+    <text x="78" y="591" fill="#7186a3" font-size="12" letter-spacing="1.3">ROLE CONDITIONS</text>
+    <circle cx="82" cy="624" r="5" fill="#ff6b7a"/><text x="96" y="629" fill="#cbd7e8" font-size="13">GSM8K homogeneous · 15% false consensus</text>
+    <circle cx="385" cy="624" r="5" fill="#67e8b3"/><text x="399" y="629" fill="#cbd7e8" font-size="13">GSM8K checker · 5%</text>
+    <circle cx="644" cy="624" r="5" fill="#ffc46b"/><text x="658" y="629" fill="#cbd7e8" font-size="13">SVAMP homogeneous · 5%</text>
+    <circle cx="893" cy="624" r="5" fill="#70a5ff"/><text x="907" y="629" fill="#cbd7e8" font-size="13">SVAMP checker · 20%</text>
+  </g>
+  <text x="62" y="696" fill="#657894" font-family="Inter,Segoe UI,sans-serif" font-size="12">Specialization creates a correction signal in 3-agent runs; headcount alone does not make the verifier reliable.</text>
+</svg>

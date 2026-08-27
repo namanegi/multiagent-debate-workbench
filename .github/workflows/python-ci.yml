@@ -1,0 +1,53 @@
+name: Python CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    # `opened` covers a newly created ready PR; `synchronize` covers pushes to a
+    # ready PR; `ready_for_review` covers draft -> ready; `closed` cancels any
+    # in-progress PR run after merge or close. Jobs are skipped while draft or
+    # closed.
+    types: [opened, synchronize, ready_for_review, closed]
+    paths:
+      - "apps/api/**"
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/python-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    # Draft and closed PR events may create a workflow run to cancel older work,
+    # but must not consume a runner. Merges to main run the checks on main.
+    name: API checks
+    if: ${{ github.event_name == 'push' || (github.event.action != 'closed' && !github.event.pull_request.draft) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: "0.12.5"
+          python-version: "3.11"
+          enable-cache: true
+
+      - name: Install API development dependencies
+        run: uv sync --directory apps/api --locked --dev --extra benchmark
+
+      - name: Lint API
+        run: uv run --directory apps/api ruff check . ../../scripts
+
+      - name: Type-check API
+        run: uv run --directory apps/api mypy src
+
+      - name: Test API
+        run: uv run --directory apps/api pytest tests
